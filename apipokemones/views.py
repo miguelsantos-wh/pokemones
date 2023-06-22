@@ -1,3 +1,5 @@
+# import asyncio
+# import time
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from apipokemones.api import get_pokemons, get_pokemon, get_imagen, get_idtipo, \
@@ -48,10 +50,10 @@ def pokemon_detail(request, id_pokemon):
 
 
 def pokemon_listtype(request, id_tipo):
-    contexto = {'pokemones': get_pokemonstype(id_tipo)}
+    contexto, tipo = get_pokemonstype(id_tipo)
     id = 0
     contexto2 = {}
-    for pokemon in contexto['pokemones']:
+    for pokemon in contexto:
         id += 1
         poke = pokemon['pokemon']
         imagen = get_imagen(poke['url'])
@@ -61,5 +63,5 @@ def pokemon_listtype(request, id_tipo):
             'url': poke['url'],
             'imagen': imagen.get('imagen'),
         }
-    return render(request, 'pokemones/pokemon_list.html', {'pokemones': contexto2})
+    return render(request, 'pokemones/pokemon_list.html', {'pokemones': contexto2, 'tipo': tipo})
 

@@ -13,10 +13,15 @@ def get_pokemons():
 def get_pokemonstype(id_tipo):
     url = 'https://pokeapi.co/api/v2/type/' + str(id_tipo)
     response = requests.get(url)
+    result, type = [], ''
     if response.ok:
         payload = response.json()
         results = payload.get('pokemon', [])
-    return results
+        languages = payload.get('names', [])
+        for lang in languages:
+            if lang.get('language').get('name') == 'en':
+                type = lang.get('name')
+    return results, type
 
 
 def get_pokemon(id):
@@ -42,6 +47,20 @@ def get_imagen(url):
             'nombre': nombre,
         }
         return data
+
+
+# async def get_imagen(session, url):
+#     async with session.get(url) as resp:
+#         response_json = await resp.json()
+#         sprite = response_json['sprites']
+#         id = response_json['id']
+#         nombre = response_json['name']
+#         data = {
+#             'imagen': sprite['front_default'],
+#             'id': id,
+#             'nombre': nombre,
+#         }
+#         return data
 
 
 def get_idtipo(url):
